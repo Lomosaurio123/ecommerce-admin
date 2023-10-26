@@ -15,10 +15,25 @@ export function MainNav({
 
     const routes = [
         {
+            href: `/${params.storeId}`,
+            label: 'Dashboard',
+            active: pathname === `/${params.storeId}`,
+        },
+        {
+            href: `/${params.storeId}/billboards`,
+            label: 'Cartelera',
+            active: pathname === `/${params.storeId}/billboards`,
+        },
+        {
+            href: `/${params.storeId}/categories`,
+            label: 'Categorias',
+            active: pathname === `/${params.storeId}/categories`,
+        },
+        {
             href: `/${params.storeId}/settings`,
             label: 'Configuración',
             active: pathname === `/${params.storeId}/settings`,
-          },
+        },
     ];
 
     return (

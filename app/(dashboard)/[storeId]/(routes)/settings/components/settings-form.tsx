@@ -6,12 +6,18 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useParams, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AlertModal } from "@/components/modals/alert-modal";
+import { ApiAlert } from "@/components/ui/api-alert";
+import { useOrigin } from "@/hooks/use-origin";
 
 
 interface SettingsFormProps {
@@ -27,7 +33,10 @@ type SettingsFormValues = z.infer< typeof formSchema >
 export const SettingsForm: React.FC<SettingsFormProps> = ({
     initialData
 }) => {
-    
+    const params = useParams();
+    const router = useRouter();
+    const origin = useOrigin();
+
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -37,12 +46,43 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
     });
 
     const onSubmit =async ( data: SettingsFormValues ) => {
-        console.log(data);
+        try {
+            setLoading(true);
+            await axios.patch( `/api/stores/${ params.storeId }`, data );
+            router.refresh();
+            toast.success('Tienda modificada');
+        } catch (error) {
+            toast.error("Algo salio mal");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const onDelete =async () => {
+        try {
+            setLoading(true);
+            await axios.delete( `/api/stores/${ params.storeId }` );
+            router.refresh();
+            router.push('/');
+            toast.success('Tienda eliminada correctamente');
+        } catch (error) {
+            toast.error("Algo salio mal, asegurate de elimiar todos los productos y categorias primero");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
 
         <>
+            <AlertModal 
+            
+                isOpen={open}
+                onClose={() => setOpen(false)}
+                onConfirm={onDelete}
+                loading={loading}
+            />
+            
             <div className="flex items-center justify-between">
                 <Heading 
                     title = "Configuración"
@@ -84,6 +124,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 </form>
 
             </Form>
+            <Separator/>
+            <ApiAlert title="NEXT_PUBLIC_API_URL" description= {`${origin}/api/${params.storeId}`} variant="public"/>
         </>
 
     );
