@@ -7,13 +7,13 @@ import { useState } from "react";
 import axios from "axios";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { BillboardColumn } from "./columns";
+import { CategoryColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
 
-    data : BillboardColumn;
+    data : CategoryColumn;
 
 }
 
@@ -35,11 +35,11 @@ export const CellAction : React.FC<CellActionProps> = ({
     const onDelete =async () => {
         try {
             setLoading(true);
-            await axios.delete( `/api/${ params.storeId }/billboards/${data.id}` );
+            await axios.delete( `/api/${ params.storeId }/categories/${data.id}` );
             router.refresh();
-            toast.success('Cartelera eliminada correctamente');
+            toast.success('Categorias eliminada correctamente');
         } catch (error) {
-            toast.error("Algo salio mal, asegurate de haber eliminado todas las categorias que tengan que ver con este poster");
+            toast.error("Algo salio mal, asegurate de haber eliminado todos los productos de esta categoria");
         } finally {
             setLoading(false);
             setOpen(false);
@@ -65,7 +65,7 @@ export const CellAction : React.FC<CellActionProps> = ({
                         <Copy className="mr-2 h-4 w-4" />
                         Copiar Id
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push(`/${params.storeId}/billboards/${data.id}`)}>
+                    <DropdownMenuItem onClick={() => router.push(`/${params.storeId}/categories/${data.id}`)}>
                         <Edit className="mr-2 h-4 w-4" />
                         Modificar
                     </DropdownMenuItem>
