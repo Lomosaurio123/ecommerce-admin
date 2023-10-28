@@ -7,13 +7,12 @@ import { useState } from "react";
 import axios from "axios";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { BillboardColumn } from "./columns";
+import { OrderColumn } from "./columns";
 import { Button } from "@/components/ui/button";
-import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
 
-    data : BillboardColumn;
+    data : OrderColumn;
 
 }
 
@@ -32,24 +31,25 @@ export const CellAction : React.FC<CellActionProps> = ({
         toast.success("ID Copiado");
     }
 
-    const onDelete =async () => {
+
+    const onChagePaid = async () => {
         try {
             setLoading(true);
-            await axios.delete( `/api/${ params.storeId }/billboards/${data.id}` );
+            await axios.patch( `/api/${ params.storeId }/orders/${data.id}` );
             router.refresh();
-            toast.success('Cartelera eliminada correctamente');
+            toast.success('Pago actualizado correctamente');
         } catch (error) {
-            toast.error("Algo salio mal, asegurate de haber eliminado todas las categorias que tengan que ver con este poster");
+            toast.error("Algo salio mal");
         } finally {
             setLoading(false);
             setOpen(false);
         }
-    };
+    }
+
 
     return (
 
         <>
-            <AlertModal isOpen={open} onClose={() => setOpen(false)} onConfirm={onDelete} loading={loading}/>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
@@ -65,13 +65,9 @@ export const CellAction : React.FC<CellActionProps> = ({
                         <Copy className="mr-2 h-4 w-4" />
                         Copiar Id
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push(`/${params.storeId}/billboards/${data.id}`)}>
+                    <DropdownMenuItem onClick={onChagePaid}>
                         <Edit className="mr-2 h-4 w-4" />
-                        Modificar
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setOpen(true)}>
-                        <Trash className="mr-2 h-4 w-4" />
-                        Eliminar
+                        Cambiar el estado de pago
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

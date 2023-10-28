@@ -131,7 +131,7 @@ model Order {
   id          String @id @default(uuid())
   storeId     String
   store       Store @relation("StoreToOrder", fields: [storeId], references: [id])
-  orederItems OrderItem[]
+  orderItems OrderItem[]
   isPaid      Boolean @default(false)
   phone       String @default("")
   address     String @default("")
