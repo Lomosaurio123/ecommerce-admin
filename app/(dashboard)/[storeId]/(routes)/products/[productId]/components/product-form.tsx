@@ -24,6 +24,7 @@ const formSchema = z.object({
     name: z.string().min(1),
     images: z.object({ url: z.string() }).array(),
     price: z.coerce.number().min(1),
+    wholesalePrice: z.coerce.number().min(1),
     categoryId: z.string().min(1),
     colorId: z.string().min(1),
     sizeId: z.string().min(1),
@@ -66,12 +67,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             ? {
                   ...initialData,
                   price: parseFloat(String(initialData.price)),
+                  wholesalePrice: parseFloat(String(initialData.price)),
                   amount: parseInt(String(initialData.amount))
               }
             : {
                   name: "",
                   images: [],
                   price: 0,
+                  wholesalePrice: 0,
                   categoryId: "",
                   colorId: "",
                   sizeId: "",
@@ -186,6 +189,20 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
                                 <FormItem>
                                     <FormLabel>Precio:</FormLabel>
+                                    <FormControl>
+                                        <Input type="number" disabled={loading} placeholder="9.99" {...field}/>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                                 
+                            ) } 
+                        />
+
+                        <FormField control={form.control} name="wholesalePrice" 
+                            render={ ( { field } ) => (
+
+                                <FormItem>
+                                    <FormLabel>Precio Mayoreo:</FormLabel>
                                     <FormControl>
                                         <Input type="number" disabled={loading} placeholder="9.99" {...field}/>
                                     </FormControl>

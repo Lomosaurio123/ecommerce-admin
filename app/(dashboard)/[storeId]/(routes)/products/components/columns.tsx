@@ -35,12 +35,16 @@ export const columns: ColumnDef<ProductColumn>[] = [
     header: "Precio",
   },
   {
+    accessorKey: "wholesalePrice",
+    header: "Precio Mayoreo",
+  },
+  {
     accessorKey: "category",
     header: "Categoria",
   },
   {
     accessorKey: "size",
-    header: "Size",
+    header: "Tamaño",
   },
   {
     accessorKey: "color",
