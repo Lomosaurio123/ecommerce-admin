@@ -219,7 +219,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                                 <FormItem>
                                     <FormLabel>Cantidad para conciderar mayoreo:</FormLabel>
                                     <FormControl>
-                                        <Input type="number" disabled={loading} placeholder="9.99" {...field}/>
+                                        <Input type="number" disabled={loading} placeholder="0" {...field}/>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
