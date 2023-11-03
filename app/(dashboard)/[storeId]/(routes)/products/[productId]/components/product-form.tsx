@@ -217,7 +217,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             render={ ( { field } ) => (
 
                                 <FormItem>
-                                    <FormLabel>Cantidad para conciderar mayoreo:</FormLabel>
+                                    <FormLabel>Cantidad para considerar mayoreo:</FormLabel>
                                     <FormControl>
                                         <Input type="number" disabled={loading} placeholder="0" {...field}/>
                                     </FormControl>

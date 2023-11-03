@@ -42,7 +42,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
   },
   {
     accessorKey: "amount_wholesalePrice",
-    header: "Cantidad para conciderar mayoreo",
+    header: "Cantidad para considerar mayoreo",
   },
   {
     accessorKey: "category",
