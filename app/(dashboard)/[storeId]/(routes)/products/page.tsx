@@ -32,6 +32,7 @@ const ProductsPage = async ({
         isArchived  : item.isArchived,
         price      : formatter.format( item.price.toNumber() ),
         wholesalePrice : formatter.format( item.wholesalePrice.toNumber() ),
+        amount_wholesalePrice : integerFormatter.format( item.amount_wholesalePrice ),
         category   : item.category.name,
         size       : item.size.name,
         color      : item.color.value,

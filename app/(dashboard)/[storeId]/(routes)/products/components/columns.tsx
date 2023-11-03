@@ -8,6 +8,8 @@ export type ProductColumn = {
   id: string
   name: string
   price: string
+  wholesalePrice: string
+  amount_wholesalePrice: string
   size: string
   category: string
   color: string
@@ -37,6 +39,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
   {
     accessorKey: "wholesalePrice",
     header: "Precio Mayoreo",
+  },
+  {
+    accessorKey: "amount_wholesalePrice",
+    header: "Cantidad para conciderar mayoreo",
   },
   {
     accessorKey: "category",

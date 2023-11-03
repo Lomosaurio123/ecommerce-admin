@@ -16,6 +16,7 @@ export async function POST(
       name,
       price,
       wholesalePrice,
+      amount_wholesalePrice,
       categoryId,
       colorId,
       sizeId,
@@ -39,6 +40,10 @@ export async function POST(
 
     if (!wholesalePrice) {
       return new NextResponse("Wholesale Price is required", { status: 400 });
+    }
+
+    if (!amount_wholesalePrice) {
+      return new NextResponse("Amount for Wholesale Price is required", { status: 400 });
     }
 
     if (!categoryId) {
@@ -81,6 +86,7 @@ export async function POST(
         name,
         price,
         wholesalePrice,
+        amount_wholesalePrice,
         isFeatured,
         isArchived,
         categoryId,

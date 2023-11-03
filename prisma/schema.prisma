@@ -104,6 +104,7 @@ model Product {
   orderItems  OrderItem[]
   amount      Int
   wholesalePrice Decimal
+  amount_wholesalePrice Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
