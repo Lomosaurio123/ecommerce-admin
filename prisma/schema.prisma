@@ -136,6 +136,7 @@ model Order {
   orderItems OrderItem[]
   isPaid      Boolean @default(false)
   phone       String @default("")
+  totalPrice  Decimal
   address     String @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

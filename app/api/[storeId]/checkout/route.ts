@@ -18,66 +18,73 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  const { productIds } = await req.json();
+    try {
 
-  if (!productIds || productIds.length === 0) {
-    return new NextResponse("Product ids are required", { status: 400 });
-  }
+      const { productIds, phone, address, totalPrice } = await req.json();
 
-  const products = await prismadb.product.findMany({
-    where: {
-      id: {
-        in: productIds
+      if (!phone) {
+        return new NextResponse("Phone is required", { status: 403 });
       }
-    }
-  });
 
-  const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
-
-  products.forEach((product) => {
-    line_items.push({
-      quantity: 1,
-      price_data: {
-        currency: 'MXN',
-        product_data: {
-          name: product.name,
-        },
-        unit_amount: product.price.toNumber() * 100
+      if (!address) {
+        return new NextResponse("Address is required", { status: 403 });
       }
-    });
-  });
 
-  const order = await prismadb.order.create({
-    data: {
-      storeId: params.storeId,
-      isPaid: false,
-      orderItems: {
-        create: productIds.map((productId: string) => ({
-          product: {
-            connect: {
-              id: productId
-            }
+      if (!totalPrice) {
+        return new NextResponse("Total price is required", { status: 403 });
+      }
+
+      if (!productIds || productIds.length === 0) {
+        return new NextResponse("Product ids are required", { status: 400 });
+      }
+    
+      const products = await prismadb.product.findMany({
+        where: {
+          id: {
+            in: productIds
           }
-        }))
-      }
+        }
+      });
+    
+      const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+    
+      products.forEach((product) => {
+        line_items.push({
+          quantity: 1,
+          price_data: {
+            currency: 'MXN',
+            product_data: {
+              name: product.name,
+            },
+            unit_amount: product.price.toNumber() * 100
+          }
+        });
+      });
+    
+      const order = await prismadb.order.create({
+        data: {
+          phone,
+          address,
+          totalPrice,
+          storeId: params.storeId,
+          isPaid: false,
+          orderItems: {
+            create: productIds.map((productId: string) => ({
+              product: {
+                connect: {
+                  id: productId
+                }
+              }
+            }))
+          }
+        }
+      });
+
+      return NextResponse.json( order )
+      
+    } catch (error) {
+      console.log('[CHECKOUT_POST]', error);
+      return new NextResponse("Internal error", { status: 500 });
     }
-  });
 
-//   const session = await stripe.checkout.sessions.create({
-//     line_items,
-//     mode: 'payment',
-//     billing_address_collection: 'required',
-//     phone_number_collection: {
-//       enabled: true,
-//     },
-//     success_url: `${process.env.FRONTEND_STORE_URL}/cart?success=1`,
-//     cancel_url: `${process.env.FRONTEND_STORE_URL}/cart?canceled=1`,
-//     metadata: {
-//       orderId: order.id
-//     },
-//   });
-
-//   return NextResponse.json({ url: session.url }, {
-//     headers: corsHeaders
-//   });
 };
