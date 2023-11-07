@@ -1,7 +1,6 @@
-import Stripe from "stripe";
+
 import { NextResponse } from "next/server";
 
-import { stripe } from "@/lib/stripe";
 import prismadb from "@/lib/prismadb";
 
 const corsHeaders = {
@@ -45,21 +44,7 @@ export async function POST(
           }
         }
       });
-    
-      const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
-    
-      products.forEach((product) => {
-        line_items.push({
-          quantity: 1,
-          price_data: {
-            currency: 'MXN',
-            product_data: {
-              name: product.name,
-            },
-            unit_amount: product.price.toNumber() * 100
-          }
-        });
-      });
+  
     
       const order = await prismadb.order.create({
         data: {
