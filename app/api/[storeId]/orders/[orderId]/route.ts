@@ -11,34 +11,39 @@ export async function PATCH(
 
         const { userId } = auth();
 
-        const body = await req.json();
-
-        var { isPaid } = body;
-
         if( !userId ) {
             return new NextResponse( "Unauthenticated", { status : 401 } );
-        }
-
-        if( !isPaid ) {
-            return new NextResponse( "Paid state is required", { status : 400 } );
         }
 
         if( !params.orderId ) {
             return new NextResponse( "Order id is required", { status : 400 } );
         }
 
-        isPaid = !isPaid; // Cambia el valor de isPaid al valor opuesto
+        // Obtener la orden actual desde la base de datos
+        const currentOrder = await prismadb.order.findUnique({
+            where : {
+                id : params.orderId,
+            }
+        });
 
-        const order = await prismadb.order.update({
+        if (!currentOrder) {
+            return new NextResponse("Order not found", { status : 404 });
+        }
+
+        // Cambiar el valor de isPaid al opuesto
+        const updatedIsPaid = !currentOrder.isPaid;
+
+        // Actualizar la orden en la base de datos
+        const updatedOrder = await prismadb.order.update({
             where : {
                 id : params.orderId,
             },
             data : {
-                isPaid
+                isPaid : updatedIsPaid
             }
         });
 
-        return NextResponse.json( order ); 
+        return NextResponse.json( updatedOrder ); 
         
     } catch (error) {
         console.log('[ORDER_PATCH]', error);
