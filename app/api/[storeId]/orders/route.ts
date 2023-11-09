@@ -21,7 +21,8 @@ export async function GET(
     
         const orders = await prismadb.order.findMany({
             where: {
-                phone: phone
+                phone: phone,
+                storeId: params.storeId
             }
         });
         
