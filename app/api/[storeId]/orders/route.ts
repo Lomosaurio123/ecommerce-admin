@@ -4,6 +4,7 @@ import prismadb from '@/lib/prismadb';
 
 export async function GET(
     req: Request,
+    { params }: { params: { storeId: string } }
   ) {
     try {
 
@@ -12,10 +13,15 @@ export async function GET(
         if (!phone) {
             return new NextResponse("Phone is required", { status: 400 });
         }
+
+        if (!params.storeId) {
+            return new NextResponse("Store id is required", { status: 400 });
+          }
+      
     
         const orders = await prismadb.order.findMany({
             where: {
-            phone: phone
+                phone: phone
             }
         });
         
