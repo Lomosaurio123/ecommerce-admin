@@ -65,7 +65,9 @@ export async function POST(
         }
       });
 
-      return NextResponse.json( order )
+      return NextResponse.json( order , {
+        headers: corsHeaders
+      } )
       
     } catch (error) {
       console.log('[CHECKOUT_POST]', error);
